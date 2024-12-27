@@ -3,7 +3,7 @@
 %global debug_package %{nil}
 %endif
 
-Name:     gpd-fan-driver-kmod
+Name:     gpd-fan-kmod
 Version:  {{{ git_dir_version }}}
 Release:  1%{?dist}
 Summary:  Driver to control fans on various GPD devices

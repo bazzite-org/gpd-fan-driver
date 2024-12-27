@@ -2,7 +2,7 @@
 %global debug_package %{nil}
 %endif
 
-Name:     gpd-fan-driver
+Name:     gpd-fan
 Version:  {{{ git_dir_version }}}
 Release:  1%{?dist}
 Summary:  Driver to control fans on various GPD devices
