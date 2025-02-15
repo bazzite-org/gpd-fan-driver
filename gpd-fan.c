@@ -351,6 +351,15 @@ static const struct dmi_system_id gpd_devices[] = {
         .driver_data = (void *) &gpd_win_mini_quirk,
     },
     {
+        // GPD Win Mini
+        // GPD Win Mini with AMD Ryzen HX370
+        .matches = {
+            DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+            DMI_MATCH(DMI_PRODUCT_NAME, "G1617-02")
+        },
+        .driver_data = (void *) &gpd_win_mini_quirk,
+    },
+    {
         // GPD Win 4 with AMD Ryzen 6800U
         .matches = {
             DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
@@ -375,6 +384,14 @@ static const struct dmi_system_id gpd_devices[] = {
         .matches = {
             DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
             DMI_MATCH(DMI_PRODUCT_NAME, "G1619-04"),
+        },
+        .driver_data = (void *) &gpd_wm2_quirk,
+    },
+    {
+        // GPD Win Max 2 with Ryzen HX370
+        .matches = {
+            DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+            DMI_MATCH(DMI_PRODUCT_NAME, "G1619-05"),
         },
         .driver_data = (void *) &gpd_wm2_quirk,
     },
@@ -611,7 +628,10 @@ static int __init gpd_fan_init(void) {
     }
 
     if (match == NULL) {
-        match = dmi_first_match(gpd_devices)->driver_data;
+        const struct dmi_system_id *dmi_match = dmi_first_match(gpd_devices);
+        if (dmi_match) {
+            match = dmi_match->driver_data;
+        }
     }
 
     if (IS_ERR_OR_NULL(match)) {
@@ -659,7 +679,6 @@ static void __exit gpd_fan_exit(void) {
 }
 
 module_init(gpd_fan_init)
-
 module_exit(gpd_fan_exit)
 
 MODULE_LICENSE("GPL");
