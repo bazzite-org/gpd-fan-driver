@@ -119,103 +119,96 @@ static struct gpd_board_drvdata gpd_wm2_drvdata = {
 };
 
 static const struct dmi_system_id dmi_table[] = {
-    {
-        // GPD Win Mini
-        // GPD Win Mini with AMD Ryzen 8840U
-        .matches = {
-        	DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-        	DMI_MATCH(DMI_PRODUCT_NAME, "G1617-01")
-        },
-        .driver_data = &gpd_win_mini_drvdata,
-    },
-    {
-        // GPD Win Mini
-        // GPD Win Mini with AMD Ryzen HX370
-        .matches = {
-        	DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-        	DMI_MATCH(DMI_PRODUCT_NAME, "G1617-02")
-        },
-        .driver_data = &gpd_win_mini_drvdata,
-    },
-    {
-        // GPD Win Mini
-        // GPD Win Mini with AMD Ryzen HX370
-        .matches = {
-        	DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-        	DMI_MATCH(DMI_PRODUCT_NAME, "G1617-02-L")
-        },
-        .driver_data = &gpd_win_mini_drvdata,
-    },
-    {
-        // GPD Win 4 with AMD Ryzen 6800U
-        .matches =
-            {
-                DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-                DMI_MATCH(DMI_PRODUCT_NAME, "G1618-04"),
-                DMI_MATCH(DMI_BOARD_VERSION, "Default string"),
-            },
-        .driver_data = &gpd_win4_drvdata,
-    },
-    {
-        // GPD Win 4 with Ryzen 7840U
-        .matches =
-            {
-                DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-                DMI_MATCH(DMI_PRODUCT_NAME, "G1618-04"),
-                DMI_MATCH(DMI_BOARD_VERSION, "Ver. 1.0"),
-            },
-        // Since 7840U, win4 uses the same drvdata as wm2
-        .driver_data = &gpd_wm2_drvdata,
-    },
-    {
-        // GPD Win 4 with Ryzen 7840U (another)
-        .matches =
-            {
-                DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-                DMI_MATCH(DMI_PRODUCT_NAME, "G1618-04"),
-                DMI_MATCH(DMI_BOARD_VERSION, "Ver.1.0"),
-            },
-        .driver_data = &gpd_wm2_drvdata,
-    },
-    {
-        // GPD Win Max 2 with Ryzen 6800U
-        // GPD Win Max 2 2023 with Ryzen 7840U
-        // GPD Win Max 2 2024 with Ryzen 8840U
-        .matches =
-            {
-                DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-                DMI_MATCH(DMI_PRODUCT_NAME, "G1619-04"),
-            },
-        .driver_data = &gpd_wm2_drvdata,
-    },
-    {
-        // GPD Win Max 2 with AMD Ryzen HX370
-        .matches =
-            {
-                DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-                DMI_MATCH(DMI_PRODUCT_NAME, "G1619-05"),
-            },
-        .driver_data = &gpd_wm2_drvdata,
-    },
-    {
-        // GPD Pocket 4
-        .matches =
-            {
-                DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-                DMI_MATCH(DMI_PRODUCT_NAME, "G1628-04"),
-            },
-        .driver_data = &gpd_win_mini_drvdata,
-    },
-    {
-        // GPD Pocket 4 (another)
-        .matches =
-            {
-                DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-                DMI_MATCH(DMI_PRODUCT_NAME, "G1628-04-L"),
-            },
-        .driver_data = &gpd_win_mini_drvdata,
-    },
-    {}
+	{
+		// GPD Win Mini
+		// GPD Win Mini with AMD Ryzen 8840U
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+			DMI_MATCH(DMI_PRODUCT_NAME, "G1617-01")
+		},
+		.driver_data = &gpd_win_mini_drvdata,
+	},
+	{
+		// GPD Win Mini
+		// GPD Win Mini with AMD Ryzen HX370
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+			DMI_MATCH(DMI_PRODUCT_NAME, "G1617-02")
+		},
+		.driver_data = &gpd_win_mini_drvdata,
+	},
+	{
+		// GPD Win Mini
+		// GPD Win Mini with AMD Ryzen HX370
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+			DMI_MATCH(DMI_PRODUCT_NAME, "G1617-02-L")
+		},
+		.driver_data = &gpd_win_mini_drvdata,
+	},
+	{
+		// GPD Win 4 with AMD Ryzen 6800U
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+			DMI_MATCH(DMI_PRODUCT_NAME, "G1618-04"),
+			DMI_MATCH(DMI_BOARD_VERSION, "Default string"),
+		},
+		.driver_data = &gpd_win4_drvdata,
+	},
+	{
+		// GPD Win 4 with Ryzen 7840U
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+			DMI_MATCH(DMI_PRODUCT_NAME, "G1618-04"),
+			DMI_MATCH(DMI_BOARD_VERSION, "Ver. 1.0"),
+		},
+		// Since 7840U, win4 uses the same drvdata as wm2
+		.driver_data = &gpd_wm2_drvdata,
+	},
+	{
+		// GPD Win 4 with Ryzen 7840U (another)
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+			DMI_MATCH(DMI_PRODUCT_NAME, "G1618-04"),
+			DMI_MATCH(DMI_BOARD_VERSION, "Ver.1.0"),
+		},
+		.driver_data = &gpd_wm2_drvdata,
+	},
+	{
+		// GPD Win Max 2 with Ryzen 6800U
+		// GPD Win Max 2 2023 with Ryzen 7840U
+		// GPD Win Max 2 2024 with Ryzen 8840U
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+			DMI_MATCH(DMI_PRODUCT_NAME, "G1619-04"),
+		},
+		.driver_data = &gpd_wm2_drvdata,
+	},
+	{
+		// GPD Win Max 2 with AMD Ryzen HX370
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+			DMI_MATCH(DMI_PRODUCT_NAME, "G1619-05"),
+		},
+		.driver_data = &gpd_wm2_drvdata,
+	},
+	{
+		// GPD Pocket 4
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+			DMI_MATCH(DMI_PRODUCT_NAME, "G1628-04"),
+		},
+		.driver_data = &gpd_win_mini_drvdata,
+	},
+	{
+		// GPD Pocket 4 (another)
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+			DMI_MATCH(DMI_PRODUCT_NAME, "G1628-04-L"),
+		},
+		.driver_data = &gpd_win_mini_drvdata,
+	},
+	{}
 };
 
 static const struct gpd_board_drvdata *gpd_module_drvdata[] = {
@@ -726,8 +719,11 @@ static int gpd_fan_probe(struct platform_device *pdev)
 		return dev_err_probe(dev, PTR_ERR(region_res),
 				     "Failed to request region\n");
 
-	dev_reg = devm_hwmon_device_register_with_info(
-		dev, DRIVER_NAME, NULL, &gpd_fan_chip_info, NULL);
+	dev_reg = devm_hwmon_device_register_with_info(dev,
+						       DRIVER_NAME,
+						       NULL,
+						       &gpd_fan_chip_info,
+						       NULL);
 	if (IS_ERR(dev_reg))
 		return dev_err_probe(dev, PTR_ERR(region_res),
 				     "Failed to register hwmon device\n");
@@ -763,8 +759,8 @@ static void gpd_fan_remove(__always_unused struct platform_device *pdev)
 {
 	gpd_driver_priv.pwm_enable = AUTOMATIC;
 	gpd_set_pwm_enable(AUTOMATIC);
-
 #ifdef OUT_OF_TREE
+
 	if (!IS_ERR_OR_NULL(DEBUG_FS_ENTRY)) {
 		debugfs_remove_recursive(DEBUG_FS_ENTRY);
 		DEBUG_FS_ENTRY = NULL;
@@ -780,12 +776,11 @@ static void gpd_fan_remove(__always_unused struct platform_device *pdev)
 }
 
 static struct platform_driver gpd_fan_driver = {
-    .probe = gpd_fan_probe,
-    .remove = gpd_fan_remove,
-    .driver =
-        {
-            .name = KBUILD_MODNAME,
-        },
+	.probe = gpd_fan_probe,
+	.remove = gpd_fan_remove,
+	.driver = {
+		.name = KBUILD_MODNAME,
+	},
 };
 
 static struct platform_device *gpd_fan_platform_device;
@@ -801,12 +796,11 @@ static int __init gpd_fan_init(void)
 		}
 	}
 
-	if (match == NULL) {
+	if (!match) {
 		const struct dmi_system_id *dmi_match =
 			dmi_first_match(dmi_table);
-		if (dmi_match) {
+		if (dmi_match)
 			match = dmi_match->driver_data;
-		}
 	}
 
 #ifdef OUT_OF_TREE
@@ -841,8 +835,10 @@ static int __init gpd_fan_init(void)
 		},
 	};
 
-	gpd_fan_platform_device = platform_create_bundle(
-		&gpd_fan_driver, gpd_fan_probe, gpd_fan_resources, 1, NULL, 0);
+	gpd_fan_platform_device = platform_create_bundle(&gpd_fan_driver,
+							 gpd_fan_probe,
+							 gpd_fan_resources,
+							 1, NULL, 0);
 
 	if (IS_ERR(gpd_fan_platform_device)) {
 		pr_warn("Failed to create platform device\n");
