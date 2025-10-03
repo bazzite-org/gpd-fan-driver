@@ -173,6 +173,14 @@ static const struct dmi_system_id dmi_table[] = {
 		.driver_data = &gpd_wm2_drvdata,
 	},
 	{
+		// GPD Win 5 with AMD AI MAX 395
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+			DMI_MATCH(DMI_PRODUCT_NAME, "G1618-05"),
+		},
+		.driver_data = &gpd_win4_drvdata,
+	},
+	{
 		// GPD Win Max 2 with Ryzen 6800U
 		// GPD Win Max 2 2023 with Ryzen 7840U
 		// GPD Win Max 2 2024 with Ryzen 8840U
