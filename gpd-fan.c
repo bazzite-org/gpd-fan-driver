@@ -41,6 +41,7 @@ enum gpd_board {
 	win4_6800u,
 	win_max_2,
 	duo,
+	mpc2,
 };
 
 enum FAN_PWM_ENABLE {
@@ -114,6 +115,18 @@ static struct gpd_fan_drvdata gpd_wm2_drvdata = {
 	.rpm_read		= 0x0218,
 	.pwm_write		= 0x1809,
 	.pwm_max		= 184,
+};
+
+static struct gpd_fan_drvdata gpd_mpc2_drvdata = {
+	.board_name		= "mpc2",
+	.board			= mpc2,
+
+	.addr_port		= 0x4E,
+	.data_port		= 0x4F,
+	.manual_control_enable	= 0x047A,
+	.rpm_read		= 0x0476,
+	.pwm_write		= 0x047A,
+	.pwm_max		= 244,
 };
 
 static const struct dmi_system_id dmi_table[] = {
@@ -230,11 +243,19 @@ static const struct dmi_system_id dmi_table[] = {
 		},
 		.driver_data = &gpd_win_mini_drvdata,
 	},
+	{
+		// GPD Micro PC 2
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+			DMI_MATCH(DMI_PRODUCT_NAME, "G1688-08"),
+		},
+		.driver_data = &gpd_mpc2_drvdata,
+	},
 	{}
 };
 
 static const struct gpd_fan_drvdata *gpd_module_drvdata[] = {
-	&gpd_win_mini_drvdata, &gpd_win4_drvdata, &gpd_wm2_drvdata, NULL
+	&gpd_win_mini_drvdata, &gpd_win4_drvdata, &gpd_wm2_drvdata, &gpd_mpc2_drvdata, NULL
 };
 
 // Helper functions to handle EC read/write
@@ -291,32 +312,6 @@ static int gpd_generic_read_rpm(void)
 	return (u16)high << 8 | low;
 }
 
-static void gpd_win4_init_ec(void)
-{
-	u8 chip_id, chip_ver;
-
-	gpd_ecram_read(0x2000, &chip_id);
-
-	if (chip_id == 0x55) {
-		gpd_ecram_read(0x1060, &chip_ver);
-		gpd_ecram_write(0x1060, chip_ver | 0x80);
-	}
-}
-
-// Helper functions to init fan controls on devices with bugged EC.
-// The firmware wont open command and address to read/write the fans on boot,
-// so we do the init sequence ourself when the driver is loaded.
-static void gpd_init_ec(const struct gpd_fan_drvdata *drvdata)
-{
-	switch (drvdata->board) {
-		case win4_6800u:
-			gpd_win4_init_ec();
-			break;
-		default:
-			break;
-	}
-}
-
 static int gpd_wm2_read_rpm(void)
 {
 	for (u16 pwm_ctr_offset = GPD_PWM_CTR_OFFSET;
@@ -339,6 +334,7 @@ static int gpd_read_rpm(void)
 	case win4_6800u:
 	case win_mini:
 	case duo:
+	case mpc2:
 		return gpd_generic_read_rpm();
 	case win_max_2:
 		return gpd_wm2_read_rpm();
@@ -365,6 +361,7 @@ static int gpd_read_pwm(void)
 	case win_mini:
 	case duo:
 	case win4_6800u:
+	case mpc2:
 		switch (gpd_driver_priv.pwm_enable) {
 		case DISABLE:
 			return 255;
@@ -420,6 +417,7 @@ static int gpd_write_pwm(u8 val)
 	case win_mini:
 	case win4_6800u:
 	case win_max_2:
+	case mpc2:
 		gpd_generic_write_pwm(val);
 		break;
 	}
@@ -487,6 +485,7 @@ static void gpd_set_pwm_enable(enum FAN_PWM_ENABLE enable)
 	switch (gpd_driver_priv.drvdata->board) {
 	case win_mini:
 	case win4_6800u:
+	case mpc2:
 		gpd_win_mini_set_pwm_enable(enable);
 		break;
 	case duo:
@@ -683,6 +682,28 @@ DEFINE_DEBUGFS_ATTRIBUTE(debugfs_pwm_fops, debugfs_pwm_get, debugfs_pwm_set,
 
 #endif
 
+static void gpd_win4_init_ec(void)
+{
+	u8 chip_id, chip_ver;
+
+	gpd_ecram_read(0x2000, &chip_id);
+
+	if (chip_id == 0x55) {
+		gpd_ecram_read(0x1060, &chip_ver);
+		gpd_ecram_write(0x1060, chip_ver | 0x80);
+	}
+}
+
+static void gpd_init_ec(void)
+{
+	// The buggy firmware won't initialize EC properly on boot.
+	// Before its initialization, reading RPM will always return 0,
+	// and writing PWM will have no effect.
+	// Initialize it manually on driver load.
+	if (gpd_driver_priv.drvdata->board == win4_6800u)
+		gpd_win4_init_ec();
+}
+
 static int gpd_fan_probe(struct platform_device *pdev)
 {
 	struct device *dev = &pdev->dev;
@@ -709,6 +730,8 @@ static int gpd_fan_probe(struct platform_device *pdev)
 	if (IS_ERR(hwdev))
 		return dev_err_probe(dev, PTR_ERR(hwdev),
 				     "Failed to register hwmon device\n");
+
+	gpd_init_ec();
 
 #ifdef OUT_OF_TREE
 	struct dentry *debug_fs_entry = debugfs_create_dir(DRIVER_NAME, NULL);
@@ -818,9 +841,6 @@ static int __init gpd_fan_init(void)
 		pr_warn("Failed to create platform device\n");
 		return PTR_ERR(gpd_fan_platform_device);
 	}
-
-	gpd_init_ec(match);
-
 #ifdef OUT_OF_TREE
 	pr_info("GPD Devices fan driver loaded\n");
 #endif
